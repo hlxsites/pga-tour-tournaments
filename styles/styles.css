@@ -10,24 +10,29 @@
  * governing permissions and limitations under the License.
  */
 
- :root {
+:root {
   /* colors */
-  --link-color: #035fe6;
-  --link-hover-color: #136ff6;
-  --background-color: #fff;
+  --color-blue: #003E7E;
+  --color-blue-dark: #013165;
+  --color-blue-light: #004B98;
+  --color-white: #fff;
+
+  --link-color: #002547e6;
+  --link-hover-color: #999;
+  --background-color: #f2f2f2;
   --overlay-background-color: #eee;
   --highlight-background-color: #ccc;
   --text-color: #000;
 
   /* fonts */
-  --body-font-family: 'helvetica neue', helvetica, ubuntu, roboto, noto, sans-serif;
-  --heading-font-family: var(--body-font-family);
+  --body-font-family: 'Roboto Condensed', 'Roboto Condensed-fallback';
+  --heading-font-family: 'Crimson Text', 'Crimson Text-fallback';
   --fixed-font-family: 'Roboto Mono', menlo, consolas, 'Liberation Mono', monospace;
 
   /* body sizes */
-  --body-font-size-m: 22px;
-  --body-font-size-s: 18px;
-  --body-font-size-xs: 14px;
+  --body-font-size-l: 20px;
+  --body-font-size-m: 18px;
+  --body-font-size-s: 16px;
 
   /* heading sizes */
   --heading-font-size-xxl: 48px;
@@ -38,8 +43,32 @@
   --heading-font-size-xs: 18px;
 
   /* nav height */
-  --nav-height: 64px;
+  --nav-height: 50px;
 
+}
+
+@media (min-width: 700px) {
+  :root {
+    --nav-height: 60px;
+  }
+}
+
+@font-face {
+  font-family: 'Roboto Condensed-fallback';
+  size-adjust: 88.91%;
+  ascent-override: 110%;
+  src: local("Arial");
+}
+
+@font-face {
+  font-family: 'Crimson Text-fallback';
+  size-adjust: 97.13%;
+  ascent-override: 107%;
+  src: local("Times New Roman");
+}
+
+*, *::before, *::after {
+ box-sizing: border-box;
 }
 
 body {
@@ -103,6 +132,10 @@ code, samp {
 
 pre {
   overflow: scroll;
+}
+
+svg {
+  fill: currentColor;
 }
 
 /* buttons */
