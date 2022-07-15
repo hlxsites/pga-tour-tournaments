@@ -1,4 +1,4 @@
-import { readBlockConfig, decorateIcons } from '../../scripts/scripts.js';
+import { readBlockConfig, decorateIcons, wrapImgsInLinks } from '../../scripts/scripts.js';
 
 /**
  * collapses all open nav sections
@@ -10,19 +10,6 @@ function collapseAllNavSections(sections) {
   });
 }
 
-function wrapImgsInLinks(block) {
-  const pictures = block.querySelectorAll('p picture');
-  pictures.forEach((pic) => {
-    const parent = pic.parentNode;
-    const link = parent.nextElementSibling.querySelector('a');
-    if (link) {
-      link.parentElement.remove();
-      link.innerHTML = pic.outerHTML;
-      parent.replaceWith(link);
-    }
-  });
-}
-
 function setupUser(section) {
   const icon = section.querySelector('.icon');
   const text = section.textContent.trim();
@@ -30,7 +17,7 @@ function setupUser(section) {
 }
 
 /**
- * decorates the header, mainly the nav
+ * loads and decorates the header, mainly the nav
  * @param {Element} block The header block element
  */
 export default async function decorate(block) {
@@ -38,7 +25,7 @@ export default async function decorate(block) {
   block.textContent = '';
 
   // fetch nav content
-  const navPath = config.nav || './nav';
+  const navPath = config.nav || '/nav';
   const resp = await fetch(`${navPath}.plain.html`);
   if (resp.ok) {
     const html = await resp.text();
@@ -48,8 +35,8 @@ export default async function decorate(block) {
     nav.innerHTML = html;
 
     const classes = ['brand', 'sections', 'social', 'tour', 'user'];
-    classes.forEach((e, j) => {
-      const section = nav.children[j];
+    classes.forEach((e, i) => {
+      const section = nav.children[i];
       if (section) section.classList.add(`nav-${e}`);
     });
 
