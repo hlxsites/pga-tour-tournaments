@@ -120,7 +120,7 @@ export function toClassName(name) {
     : '';
 }
 
-/*
+/**
  * Sanitizes a name for use as a js property name.
  * @param {string} name The unsanitized name
  * @returns {string} The camelCased name
@@ -150,6 +150,23 @@ export function decorateIcons(element = document) {
       } else {
         span.innerHTML = iconHTML;
       }
+    }
+  });
+}
+
+/**
+ * Wraps images followed by links within a matching <a> tag.
+ * @param {Element} container The container element
+ */
+export function wrapImgsInLinks(container) {
+  const pictures = container.querySelectorAll('p picture');
+  pictures.forEach((pic) => {
+    const parent = pic.parentNode;
+    const link = parent.nextElementSibling.querySelector('a');
+    if (link && link.textContent.includes(link.getAttribute('href'))) {
+      link.parentElement.remove();
+      link.innerHTML = pic.outerHTML;
+      parent.replaceWith(link);
     }
   });
 }
@@ -597,15 +614,19 @@ function buildHeroBlock(main) {
   }
 }
 
-function loadHeader(header) {
-  const headerBlock = buildBlock('header', '');
+function loadHeader(header, path) {
+  let blockStructure = '';
+  if (path) blockStructure = [['<div>nav</div>', `<div>/${path}/nav</div>`]];
+  const headerBlock = buildBlock('header', blockStructure);
   header.append(headerBlock);
   decorateBlock(headerBlock);
   loadBlock(headerBlock);
 }
 
-function loadFooter(footer) {
-  const footerBlock = buildBlock('footer', '');
+function loadFooter(footer, path) {
+  let blockStructure = '';
+  if (path) blockStructure = [['<div>footer</div>', `<div>/${path}/footer</div>`]];
+  const footerBlock = buildBlock('footer', blockStructure);
   footer.append(footerBlock);
   decorateBlock(footerBlock);
   loadBlock(footerBlock);
@@ -660,8 +681,9 @@ async function loadLazy(doc) {
   const element = hash ? main.querySelector(hash) : false;
   if (hash && element) element.scrollIntoView();
 
-  loadHeader(doc.querySelector('header'));
-  loadFooter(doc.querySelector('footer'));
+  const directory = window.location.pathname.split('/')[1];
+  loadHeader(doc.querySelector('header'), directory);
+  loadFooter(doc.querySelector('footer'), directory);
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   addFavIcon(`${window.hlx.codeBasePath}/styles/favicon.svg`);
